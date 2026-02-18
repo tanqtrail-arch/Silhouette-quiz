@@ -6,11 +6,13 @@
 <title>シルエットクイズ</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0f1729;--card:#182640;--ac:#00e5ff;--ac2:#ff6b9d;--gold:#ffd700;--grn:#4cff91;--txt:#e8f0ff;--dim:#6680aa}
-body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
-.ctn{max-width:460px;margin:0 auto;padding:16px}
+:root{--bg:#0a0a1a;--card:#141428;--ac:#00e5ff;--ac2:#ff6b9d;--gold:#ffd700;--grn:#4cff91;--txt:#e8f0ff;--dim:#6680aa;--alt:#4cff91}
+body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding-bottom:40px}
+.ctn{max-width:460px;margin:0 auto;padding:16px;padding-top:8px}
 .scr{display:none}.scr.on{display:block;animation:fi .4s ease}
 @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.alt-badge{position:fixed;top:12px;right:14px;background:linear-gradient(135deg,#1a2a1a,#0d1a0d);border:1.5px solid rgba(76,255,145,.3);border-radius:20px;padding:6px 14px;font-size:.88em;font-weight:900;color:var(--alt);z-index:300;display:flex;align-items:center;gap:5px;box-shadow:0 2px 16px rgba(76,255,145,.1)}
+.alt-badge .alt-num{font-variant-numeric:tabular-nums}
 .tl{text-align:center;font-size:2.2em;font-weight:900;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:40px 0 4px}
 .ts{text-align:center;color:var(--dim);font-size:.92em;margin-bottom:32px}
 .mc{background:var(--card);border:2px solid rgba(0,229,255,.12);border-radius:16px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
@@ -25,7 +27,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .sc{background:var(--card);border-radius:20px;padding:20px;text-align:center;margin-bottom:14px;min-height:220px;display:flex;align-items:center;justify-content:center}
 .sil-img{max-width:200px;max-height:200px;transition:all .4s ease}
 .sil-img.silhouette{filter:brightness(0) invert(1)}
-.sil-img.colored{filter:none;drop-shadow(0 0 12px rgba(76,255,145,.4))}
+.sil-img.colored{filter:none}
 .hb{display:flex;gap:7px;margin-bottom:8px}
 .hn{flex:1;background:var(--card);border:1.5px solid rgba(255,255,255,.1);color:var(--txt);font-family:inherit;font-size:.76em;font-weight:700;padding:9px 4px;border-radius:10px;cursor:pointer;opacity:.55}
 .hn:hover:not(.us){border-color:var(--ac);opacity:.85}
@@ -37,7 +39,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .cx:hover:not(.dn){border-color:var(--ac);transform:translateY(-2px)}
 .cx.dn{pointer-events:none}.cx.ok{border-color:var(--grn)!important;background:rgba(76,255,145,.12)!important}
 .cx.ng{border-color:var(--ac2)!important;background:rgba(255,107,157,.1)!important;opacity:.6}
-.yk{display:none;position:fixed;inset:0;background:rgba(10,18,36,.93);z-index:100;align-items:center;justify-content:center}
+.yk{display:none;position:fixed;inset:0;background:rgba(10,10,26,.93);z-index:100;align-items:center;justify-content:center}
 .yk.sh{display:flex}
 .yi{background:var(--card);border-radius:22px;padding:28px 24px;text-align:center;border:2px solid var(--grn);box-shadow:0 0 50px rgba(76,255,145,.12);max-width:340px;width:88%;animation:pp .35s ease}
 .yt{font-size:1.2em;font-weight:900;color:var(--grn);margin-bottom:14px}
@@ -45,18 +47,40 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .yf{color:var(--dim);font-size:.9em;margin-bottom:14px}
 .yb{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
 .ybf{height:100%;background:var(--grn);border-radius:2px;width:100%}
+/* Result */
 .rw{text-align:center;padding-top:36px}
 .re{font-size:3.5em;margin-bottom:8px}.rt{font-size:1.7em;font-weight:900;margin-bottom:6px}
-.rsc{font-size:1.15em;color:var(--gold);font-weight:700;margin-bottom:6px}
-.rd{color:var(--dim);font-size:.88em;margin-bottom:22px}
-.rst{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:26px}
+.rsc{font-size:1.15em;color:var(--gold);font-weight:700;margin-bottom:10px}
+.rd{color:var(--dim);font-size:.88em;margin-bottom:12px}
+.r-alt-box{background:linear-gradient(135deg,rgba(76,255,145,.08),rgba(76,255,145,.02));border:2px solid rgba(76,255,145,.25);border-radius:16px;padding:16px;margin-bottom:16px;animation:altIn .6s ease}
+@keyframes altIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.r-alt-main{font-size:2.4em;font-weight:900;color:var(--alt);text-shadow:0 0 20px rgba(76,255,145,.4)}
+.r-alt-detail{font-size:.78em;color:var(--dim);margin-top:4px}
+.r-alt-first{color:var(--gold);font-weight:700;font-size:.9em;margin-top:6px;animation:pp .5s ease}
+.r-alt-total{font-size:.85em;color:var(--dim);margin-top:6px}
+.rst{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px}
 .sb{background:var(--card);border-radius:14px;padding:14px 6px}
 .sn{font-size:1.6em;font-weight:900;color:var(--ac)}.sl{font-size:.7em;color:var(--dim);margin-top:2px}
+/* Result ranking preview */
+.r-rank-prev{background:var(--card);border-radius:14px;padding:14px;margin-bottom:16px;text-align:center}
+.r-rank-label{font-size:.78em;color:var(--dim);margin-bottom:4px}
+.r-rank-pos{font-size:1.4em;font-weight:900;color:var(--gold)}
+/* Result name input & register */
+.r-name-sec{margin-bottom:18px}
+.r-name-row{display:flex;gap:8px}
+.r-name-input{flex:1;background:var(--card);border:1.5px solid rgba(255,255,255,.15);color:var(--txt);font-family:inherit;font-size:.95em;padding:10px 12px;border-radius:12px;outline:none}
+.r-name-input:focus{border-color:var(--ac)}
+.r-name-input::placeholder{color:var(--dim)}
+.r-name-btn{background:linear-gradient(135deg,var(--gold),#f0c000);border:none;color:var(--bg);font-family:inherit;font-size:.88em;font-weight:800;padding:10px 16px;border-radius:12px;cursor:pointer;white-space:nowrap}
+.r-name-btn:disabled{opacity:.35;cursor:not-allowed}
+.r-registered{color:var(--grn);font-size:.85em;font-weight:700;text-align:center;margin-bottom:12px;animation:pp .3s ease}
 .rbs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .rb{border:none;font-family:inherit;font-size:.95em;font-weight:800;padding:13px 26px;border-radius:28px;cursor:pointer}
 .rb:hover{transform:translateY(-2px)}
 .rb.p{background:linear-gradient(135deg,var(--ac),#00b4d8);color:var(--bg)}
 .rb.s{background:var(--card);border:2px solid var(--dim);color:var(--txt)}
+.rNew{text-align:center;color:var(--gold);font-weight:900;font-size:1.1em;margin-top:16px;animation:pp .4s ease}
+/* Collection */
 .ct{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .ct h2{font-size:1.2em;font-weight:900}.cc{color:var(--gold);font-weight:700}
 .rs{margin-bottom:14px}.rn{font-size:.82em;color:var(--ac2);font-weight:700;margin-bottom:5px}
@@ -64,25 +88,52 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .pc{width:52px;height:40px;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.62em;font-weight:700;color:var(--dim);border:1.5px solid transparent;position:relative}
 .pc.gt{background:rgba(0,229,255,.12);color:var(--ac);border-color:rgba(0,229,255,.25)}
 .pc.gt::after{content:'✓';position:absolute;top:1px;right:3px;font-size:.65em;color:var(--grn)}
+/* Ranking screen */
+.rk-period-tabs{display:flex;gap:8px;margin-bottom:10px}
+.rk-period-tab{flex:1;background:var(--card);border:1.5px solid rgba(255,255,255,.1);color:var(--dim);font-family:inherit;font-size:.82em;font-weight:700;padding:10px 4px;border-radius:10px;cursor:pointer;text-align:center}
+.rk-period-tab.act{border-color:var(--gold);color:var(--gold);background:rgba(255,215,0,.06)}
+.rk-diff-tabs{display:flex;gap:6px;margin-bottom:14px}
+.rk-diff-tab{flex:1;background:var(--card);border:1.5px solid rgba(255,255,255,.1);color:var(--dim);font-family:inherit;font-size:.7em;font-weight:700;padding:8px 4px;border-radius:10px;cursor:pointer;text-align:center}
+.rk-diff-tab.act{border-color:var(--ac);color:var(--ac);background:rgba(0,229,255,.08)}
+.rk-countdown{text-align:center;color:var(--dim);font-size:.75em;margin-bottom:12px;padding:6px;background:rgba(255,255,255,.03);border-radius:8px}
+.rk-countdown span{color:var(--ac);font-weight:700}
+.rk-row{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:.88em}
+.rk-row.rk-top{border:1.5px solid rgba(255,215,0,.2);background:rgba(255,215,0,.04)}
+.rk-pos{width:30px;text-align:center;font-size:1.1em;flex-shrink:0}
+.rk-name{font-weight:700;min-width:50px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-sc{font-weight:900;color:var(--gold);min-width:55px;text-align:right}
+.rk-dt{color:var(--dim);font-size:.75em;margin-left:auto}
+.rk-empty{text-align:center;color:var(--dim);padding:30px 0}
+/* Animations */
 .fp{position:fixed;font-size:1.3em;font-weight:900;color:var(--gold);pointer-events:none;z-index:150;animation:fu .9s ease-out forwards}
 @keyframes fu{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
 .cf{position:fixed;width:7px;height:7px;border-radius:2px;pointer-events:none;z-index:200;animation:cd 1.8s ease-out forwards}
 @keyframes cd{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(85vh) rotate(600deg);opacity:0}}
-.rNew{text-align:center;color:var(--gold);font-weight:900;font-size:1.1em;margin-top:16px;animation:pp .4s ease}
-.rk-tabs{display:flex;gap:6px;margin-bottom:16px}
-.rk-tab{flex:1;background:var(--card);border:1.5px solid rgba(255,255,255,.1);color:var(--dim);font-family:inherit;font-size:.72em;font-weight:700;padding:10px 4px;border-radius:10px;cursor:pointer;transition:all .2s}
-.rk-tab:hover{border-color:var(--ac)}
-.rk-tab.act{border-color:var(--ac);color:var(--ac);background:rgba(0,229,255,.08)}
-.rk-row{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:.88em}
-.rk-row.rk-top{border:1.5px solid rgba(255,215,0,.2);background:rgba(255,215,0,.04)}
-.rk-pos{width:30px;text-align:center;font-size:1.1em;flex-shrink:0}
-.rk-sc{font-weight:900;color:var(--gold);min-width:60px}
-.rk-dt{color:var(--dim);font-size:.8em;flex:1}
-.rk-dd{color:var(--dim);font-size:.72em}
+.alt-float{position:fixed;font-size:1.5em;font-weight:900;color:var(--alt);pointer-events:none;z-index:150;animation:altUp 1.2s ease-out forwards;text-shadow:0 0 12px rgba(76,255,145,.5)}
+@keyframes altUp{0%{opacity:1;transform:translateY(0) scale(1)}50%{opacity:1;transform:translateY(-30px) scale(1.3)}100%{opacity:0;transform:translateY(-70px) scale(1)}}
+/* LINE Report */
+.line-sec{margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)}
+.line-title{font-size:.95em;font-weight:900;color:var(--alt);margin-bottom:14px;text-align:center}
+.line-input{width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.12);color:var(--txt);font-family:inherit;font-size:1em;padding:12px 14px;border-radius:12px;margin-bottom:12px;outline:none}
+.line-input:focus{border-color:var(--ac)}
+.line-input::placeholder{color:var(--dim)}
+.line-btn{display:block;width:100%;background:linear-gradient(135deg,#06c755,#04a847);border:none;color:#fff;font-family:inherit;font-size:1em;font-weight:800;padding:14px;border-radius:14px;cursor:pointer;transition:all .2s}
+.line-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 20px rgba(6,199,85,.3)}
+.line-btn:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.8)}
+.line-confirm{display:none;position:fixed;inset:0;background:rgba(10,10,26,.93);z-index:400;align-items:center;justify-content:center}
+.line-confirm.sh{display:flex}
+.lc-box{background:var(--card);border-radius:18px;padding:24px;text-align:center;max-width:320px;width:88%;border:2px solid rgba(76,255,145,.25)}
+.lc-warn{font-size:1em;font-weight:700;color:var(--alt);margin-bottom:8px}
+.lc-msg{font-size:.88em;color:var(--dim);margin-bottom:18px}
+.lc-btns{display:flex;gap:10px;justify-content:center}
+.lc-cancel{background:var(--card);border:1.5px solid var(--dim);color:var(--txt);font-family:inherit;font-size:.92em;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer}
+.lc-ok{background:linear-gradient(135deg,#06c755,#04a847);border:none;color:#fff;font-family:inherit;font-size:.92em;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer}
 </style>
 </head>
 <body>
+<div class="alt-badge" id="altBadge">🪙 <span class="alt-num" id="altTotal">0</span> <span style="font-size:.75em;opacity:.7">ALT</span></div>
 <div class="ctn">
+  <!-- HOME s0 -->
   <div class="scr on" id="s0">
     <div class="tl">🗾 シルエットクイズ</div>
     <div class="ts">とどうふけん の かたちを おぼえよう！</div>
@@ -91,7 +142,13 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
     <div class="mc" onclick="go('hard')"><div class="mi">⭐⭐⭐</div><div class="mf"><h3>チャレンジ（20もん）</h3><p>ぜんこく からランダム！</p></div><div class="ms">★★★</div></div>
     <button class="cb" onclick="col()">🗾 コレクションちず</button>
     <button class="cb" onclick="showRank()" style="margin-top:10px;border-color:var(--ac);color:var(--ac)">🏆 ランキング</button>
+    <div class="line-sec">
+      <div class="line-title">💰 ALTをTRAILに報告する</div>
+      <input class="line-input" id="lineName" type="text" placeholder="なまえを入力" oninput="checkLineBtn()">
+      <button class="line-btn" id="lineBtn" disabled onclick="showLineConfirm()">💬 LINEで報告する</button>
+    </div>
   </div>
+  <!-- QUIZ s1 -->
   <div class="scr" id="s1">
     <div class="qt"><button class="bb" onclick="home()">←</button><span class="qp" id="qP">1/10</span><span class="qs" id="qS">0pt</span></div>
     <div class="pb"><div class="pf" id="pF"></div></div>
@@ -100,28 +157,57 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
     <div id="hA"></div>
     <div class="ch" id="cH"></div>
   </div>
+  <!-- RESULT s2 -->
   <div class="scr" id="s2"><div class="rw">
     <div class="re" id="rE">🎉</div><div class="rt" id="rT">すごい！</div>
-    <div class="rsc" id="rS">0pt</div><div class="rd" id="rD"></div>
+    <div class="rsc" id="rS">0pt</div>
+    <div class="rd" id="rD"></div>
+    <!-- ALT reward box -->
+    <div class="r-alt-box" id="rAltBox">
+      <div class="r-alt-main" id="rAltMain">🪙 +0 ALT</div>
+      <div class="r-alt-detail" id="rAltDetail"></div>
+      <div class="r-alt-first" id="rAltFirst" style="display:none">🎊 初クリアボーナス +5 ALT！</div>
+      <div class="r-alt-total" id="rAltTotalDisp">合計: 0 ALT</div>
+    </div>
     <div class="rst"><div class="sb"><div class="sn" id="xC">0</div><div class="sl">せいかい</div></div><div class="sb"><div class="sn" id="xN">0</div><div class="sl">ノーヒント</div></div><div class="sb"><div class="sn" id="xW">0</div><div class="sl">NEW!</div></div></div>
+    <!-- Ranking preview -->
+    <div class="r-rank-prev" id="rRankPrev" style="display:none">
+      <div class="r-rank-label" id="rRankLabel">📅 今週ランキング</div>
+      <div class="r-rank-pos" id="rRankPos">1位！</div>
+    </div>
+    <!-- Name input for ranking -->
+    <div class="r-name-sec" id="rNameSec">
+      <div class="r-name-row"><input class="r-name-input" id="rNameInput" type="text" placeholder="なまえを入力" oninput="checkRegBtn()"><button class="r-name-btn" id="rRegBtn" disabled onclick="registerRank()">📝 とうろく</button></div>
+    </div>
+    <div class="r-registered" id="rRegistered" style="display:none">✅ ランキングにとうろくしたよ！</div>
     <div class="rbs"><button class="rb p" onclick="home()">もどる</button><button class="rb s" onclick="showRank()">🏆 ランキング</button><button class="rb s" onclick="col()">🗾 コレクション</button></div>
-    <div id="rNew" class="rNew" style="display:none">🎊 ハイスコア こうしん！</div>
   </div></div>
+  <!-- COLLECTION s3 -->
   <div class="scr" id="s3">
     <div class="ct"><button class="bb" onclick="home()">←</button><h2>🗾 コレクション</h2><span class="cc" id="cC">0/47</span></div>
     <div id="cG"></div>
   </div>
+  <!-- RANKING s4 -->
   <div class="scr" id="s4">
     <div class="ct"><button class="bb" onclick="home()">←</button><h2>🏆 ランキング</h2><span></span></div>
-    <div class="rk-tabs"><button class="rk-tab act" data-mode="easy">⭐ かんたん</button><button class="rk-tab" data-mode="normal">⭐⭐ ふつう</button><button class="rk-tab" data-mode="hard">⭐⭐⭐ チャレンジ</button></div>
+    <div class="rk-period-tabs"><button class="rk-period-tab act" id="rkPeriodW" onclick="switchPeriod('weekly')">📅 しゅうかん</button><button class="rk-period-tab" id="rkPeriodL" onclick="switchPeriod('legend')">👑 でんせつ</button></div>
+    <div class="rk-countdown" id="rkCountdown" style="display:none">リセットまで <span id="rkTimer">-</span></div>
+    <div class="rk-diff-tabs"><button class="rk-diff-tab act" data-diff="easy" onclick="switchDiff(this,'easy')">⭐ かんたん</button><button class="rk-diff-tab" data-diff="normal" onclick="switchDiff(this,'normal')">⭐⭐ ふつう</button><button class="rk-diff-tab" data-diff="hard" onclick="switchDiff(this,'hard')">⭐⭐⭐ チャレンジ</button></div>
     <div id="rkList"></div>
   </div>
 </div>
+<!-- Yakitsuke -->
 <div class="yk" id="yO"><div class="yi">
   <div class="yt">🔥 やきつけタイム！</div>
   <img id="yImg" class="sil-img colored" src="" alt="" style="max-width:130px;max-height:130px">
   <div class="yn" id="yN"></div><div class="yf" id="yF"></div>
   <div class="yb"><div class="ybf" id="yB"></div></div>
+</div></div>
+<!-- LINE confirm -->
+<div class="line-confirm" id="lineConfirm"><div class="lc-box">
+  <div class="lc-warn">⚠️ <span id="lcAlt">0</span>ALTを報告してリセットします</div>
+  <div class="lc-msg">LINEでTRAILに送信されます</div>
+  <div class="lc-btns"><button class="lc-cancel" onclick="hideLineConfirm()">やめる</button><button class="lc-ok" onclick="sendLine()">OK！送る</button></div>
 </div></div>
 <script>
 var IMG={};
@@ -175,18 +261,73 @@ IMG[47]="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJgAAADICAYAAAAUTCjWAAA0p
 var D=[{id:1,n:"北海道",r:"ほっかいどう",g:"北海道",h:["でっかいどう！いちばん大きい","🦀カニ・ラベンダー・バター","にほんの いちばん北にあるよ"]},{id:2,n:"青森県",r:"あおもりけん",g:"東北",h:["上に2つの半島がつきでてる","🍎りんごが日本一！","とうほくの いちばん北"]},{id:3,n:"岩手県",r:"いわてけん",g:"東北",h:["たてに長い四角っぽい形","🥩わんこそば・れいめん","とうほくの右がわの上"]},{id:4,n:"宮城県",r:"みやぎけん",g:"東北",h:["右がわが海でギザギザ","🐄ぎゅうタン・ずんだもち","とうほくのまんなかの右"]},{id:5,n:"秋田県",r:"あきたけん",g:"東北",h:["たてに長くて左がまるい","🌾おこめ（あきたこまち）","とうほくの日本海がわ"]},{id:6,n:"山形県",r:"やまがたけん",g:"東北",h:["人のかおみたいな形","🍒さくらんぼが日本一！","とうほくの左がわ"]},{id:7,n:"福島県",r:"ふくしまけん",g:"東北",h:["よこに広い形","🍑もも・あかべこ","とうほくの いちばん南"]},{id:8,n:"茨城県",r:"いばらきけん",g:"関東",h:["右に大きな湖がある","🥬ほしいも・なっとう","かんとうの北ひがし"]},{id:9,n:"栃木県",r:"とちぎけん",g:"関東",h:["四角っぽい形","🍓いちごが日本一！","かんとうの北のほう"]},{id:10,n:"群馬県",r:"ぐんまけん",g:"関東",h:["つるが羽をひろげた形","♨くさつおんせん","かんとうの北にし"]},{id:11,n:"埼玉県",r:"さいたまけん",g:"関東",h:["よこ長でぺったんこ","🍘そうかせんべい","とうきょうの上"]},{id:12,n:"千葉県",r:"ちばけん",g:"関東",h:["いぬがおすわりしてる形","🥜ピーナッツ・ディズニー","うみにかこまれてる"]},{id:13,n:"東京都",r:"とうきょうと",g:"関東",h:["小さいけど人がいちばん多い","🗼タワー・スカイツリー","にほんの しゅと"]},{id:14,n:"神奈川県",r:"かながわけん",g:"関東",h:["下がうみで右にでっぱり","🌊よこはま・かまくら","とうきょうの南がわ"]},{id:15,n:"新潟県",r:"にいがたけん",g:"中部",h:["ほそ長くてカーブしてる","🍚コシヒカリがゆうめい","日本海がわ、上のほう"]},{id:16,n:"富山県",r:"とやまけん",g:"中部",h:["エイみたいな形","🦑ホタルイカ・くろべダム","日本海がわのまんなか"]},{id:17,n:"石川県",r:"いしかわけん",g:"中部",h:["たてに長くて上がふとい","🦀カニ・けんろくえん","のとはんとうがある"]},{id:18,n:"福井県",r:"ふくいけん",g:"中部",h:["右がわがでこぼこ","🦕きょうりゅうのかせき！","日本海がわ"]},{id:19,n:"山梨県",r:"やまなしけん",g:"中部",h:["やまにかこまれた形","🍇ぶどう・もも","ふじさんが見える"]},{id:20,n:"長野県",r:"ながのけん",g:"中部",h:["たてに長い形","🍎りんご・スキー","やまが多い"]},{id:21,n:"岐阜県",r:"ぎふけん",g:"中部",h:["とりがとんでるみたい","🏔しらかわごう","にほんのまんなか"]},{id:22,n:"静岡県",r:"しずおかけん",g:"中部",h:["よこにとても長い","🍵おちゃ・ふじさん","とうきょうとなごやの間"]},{id:23,n:"愛知県",r:"あいちけん",g:"中部",h:["下にでっぱりがある","🏯なごやじょう・みそかつ","とうかいのまんなか"]},{id:24,n:"三重県",r:"みえけん",g:"近畿",h:["たてに長くてギザギザ","🦐いせえび・いせじんぐう","きいはんとうの東"]},{id:25,n:"滋賀県",r:"しがけん",g:"近畿",h:["まんなかに大きなみずうみ","🏞びわこが日本一！","きょうとの右がわ"]},{id:26,n:"京都府",r:"きょうとふ",g:"近畿",h:["上がひろくて下がせまい","⛩きんかくじ・きよみずでら","きんきのまんなか"]},{id:27,n:"大阪府",r:"おおさかふ",g:"近畿",h:["小さくてまるっぽい","🐙たこやき・つうてんかく","人が2ばんめに多い"]},{id:28,n:"兵庫県",r:"ひょうごけん",g:"近畿",h:["上下に長くて北も南もうみ","🏯ひめじじょう・こうべぎゅう","おおさかの西がわ"]},{id:29,n:"奈良県",r:"ならけん",g:"近畿",h:["たてに長い形","🦌しか・だいぶつ","うみがない"]},{id:30,n:"和歌山県",r:"わかやまけん",g:"近畿",h:["きいはんとうの下","🍊みかん・うめぼし・パンダ","きんきのいちばん南"]},{id:31,n:"鳥取県",r:"とっとりけん",g:"中国",h:["よこに長くてうすい","🏜とっとりさきゅう","ちゅうごくの北がわ"]},{id:32,n:"島根県",r:"しまねけん",g:"中国",h:["よこにとても長い","⛩いずもたいしゃ","とっとりの左がわ"]},{id:33,n:"岡山県",r:"おかやまけん",g:"中国",h:["下にしまがある","🍑ももたろう・きびだんご","ちゅうごくのまんなか"]},{id:34,n:"広島県",r:"ひろしまけん",g:"中国",h:["南にしまが多い","⛩いつくしまじんじゃ","ひろしまカープ"]},{id:35,n:"山口県",r:"やまぐちけん",g:"中国",h:["ほんしゅうの西のはし","🐡ふぐ","きゅうしゅうに近い"]},{id:36,n:"徳島県",r:"とくしまけん",g:"四国",h:["しこくの右がわの下","💃あわおどり・すだち","しこくの東がわ"]},{id:37,n:"香川県",r:"かがわけん",g:"四国",h:["いちばん小さいけん","🍜うどんが大すき！","しこくの北がわ"]},{id:38,n:"愛媛県",r:"えひめけん",g:"四国",h:["しこくの左がわ","🍊みかん・どうごおんせん","しこくの西がわ"]},{id:39,n:"高知県",r:"こうちけん",g:"四国",h:["よこにとても長い","🐋カツオ・よさこい","しこくの南がわ"]},{id:40,n:"福岡県",r:"ふくおかけん",g:"九州",h:["きゅうしゅうの入り口","🍜とんこつラーメン・めんたいこ","きゅうしゅうの北"]},{id:41,n:"佐賀県",r:"さがけん",g:"九州",h:["小さくてまるい形","🎈バルーンフェスタ","きゅうしゅうの北にし"]},{id:42,n:"長崎県",r:"ながさきけん",g:"九州",h:["しまがたくさんある","🎂カステラ・ちゃんぽん","きゅうしゅうの西がわ"]},{id:43,n:"熊本県",r:"くまもとけん",g:"九州",h:["くまモンのけん！","🏔あそさん・くまモン","きゅうしゅうのまんなか"]},{id:44,n:"大分県",r:"おおいたけん",g:"九州",h:["右がわがギザギザ","♨おんせんが日本一！","きゅうしゅうの北ひがし"]},{id:45,n:"宮崎県",r:"みやざきけん",g:"九州",h:["たてに長くて東がうみ","🌴マンゴー・チキンなんばん","きゅうしゅうの南ひがし"]},{id:46,n:"鹿児島県",r:"かごしまけん",g:"九州",h:["下にしまがたくさん","🌋さくらじま・さつまいも","きゅうしゅうのいちばん南"]},{id:47,n:"沖縄県",r:"おきなわけん",g:"沖縄",h:["たくさんのしまでできてる","🌺シーサー・ゴーヤー","にほんのいちばん南"]}];
 var RG=[{n:"北海道",i:[1]},{n:"東北",i:[2,3,4,5,6,7]},{n:"関東",i:[8,9,10,11,12,13,14]},{n:"中部",i:[15,16,17,18,19,20,21,22,23]},{n:"近畿",i:[24,25,26,27,28,29,30]},{n:"中国",i:[31,32,33,34,35]},{n:"四国",i:[36,37,38,39]},{n:"九州・沖縄",i:[40,41,42,43,44,45,46,47]}];
 var EZ=[1,2,12,13,23,27,34,37,40,47],NM=[1,2,5,7,9,12,13,14,17,20,23,26,27,34,47];
-var cl={},G={},ranking={easy:[],normal:[],hard:[]};
+
+// === State ===
+var altTotal=0;
+var cl={};
+var G={};
+var clearedModes={};
+// Ranking: {weekly:{easy:[],normal:[],hard:[]}, legend:{easy:[],normal:[],hard:[]}}
+var rankData={weekly:{easy:[],normal:[],hard:[]},legend:{easy:[],normal:[],hard:[]}};
+var weeklyStart=getWeekStart();
+var rkCurPeriod='weekly',rkCurDiff='easy';
+var rkTimerInterval=null;
+
+// === Weekly reset logic ===
+function getWeekStart(){
+  // Monday 4:00 JST
+  var now=new Date();
+  var d=new Date(now);
+  // day: 0=Sun,1=Mon...
+  var day=d.getDay();
+  var diff=day===0?6:day-1; // days since last Monday
+  d.setDate(d.getDate()-diff);
+  d.setHours(4,0,0,0);
+  if(now<d){d.setDate(d.getDate()-7)}
+  return d.getTime();
+}
+function getNextWeekStart(){
+  return weeklyStart+7*24*60*60*1000;
+}
+function checkWeeklyReset(){
+  var now=Date.now();
+  if(now>=getNextWeekStart()){
+    rankData.weekly={easy:[],normal:[],hard:[]};
+    weeklyStart=getWeekStart();
+  }
+}
+function getCountdownStr(){
+  var remain=getNextWeekStart()-Date.now();
+  if(remain<=0)return 'リセット中...';
+  var d=Math.floor(remain/86400000);
+  var h=Math.floor((remain%86400000)/3600000);
+  var m=Math.floor((remain%3600000)/60000);
+  return d+'日 '+h+'時間 '+m+'分';
+}
+
+// === ALT ===
+function updAltBadge(){document.getElementById('altTotal').textContent=altTotal}
+function getAltReward(pc){
+  if(pc===1)return 10;
+  if(pc>=.8)return 7;
+  if(pc>=.5)return 5;
+  return 3;
+}
+
+// === Core ===
 function ss(id){var s=document.querySelectorAll('.scr');for(var i=0;i<s.length;i++)s[i].classList.remove('on');document.getElementById(id).classList.add('on')}
-function home(){ss('s0')}
+function home(){ss('s0');updAltBadge();checkLineBtn()}
 function sf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}}
 function fp(id){for(var i=0;i<D.length;i++)if(D[i].id===id)return D[i];return null}
+
 function go(m){
-  G={q:[],i:0,s:0,c:0,nh:0,nw:0,hu:0,a:false,mode:m};
+  G={q:[],i:0,s:0,c:0,nh:0,nw:0,hu:0,a:false,mode:m,registered:false};
   var ids=m==='easy'?EZ:m==='normal'?NM:null,pool=[];
   if(ids){for(var k=0;k<ids.length;k++)pool.push(fp(ids[k]))}else{for(var k=0;k<D.length;k++)pool.push(D[k])}
   sf(pool);G.q=pool.slice(0,m==='easy'?10:m==='normal'?15:20);
   ss('s1');lq();
 }
+
 function lq(){
   var q=G.q[G.i],t=G.q.length;G.hu=0;G.a=false;
   document.getElementById('qP').textContent=(G.i+1)+' / '+t;
@@ -199,6 +340,7 @@ function lq(){
   var ch=mc(q),el=document.getElementById('cH');el.innerHTML='';
   for(var ci=0;ci<ch.length;ci++){var b=document.createElement('button');b.className='cx';b.textContent=ch[ci].n;b.onclick=(function(c){return function(){ans(this,c,q)}})(ch[ci]);el.appendChild(b)}
 }
+
 function mc(q){
   var o=[q],sm=[],df=[];
   for(var i=0;i<D.length;i++){if(D[i].id===q.id)continue;if(D[i].g===q.g)sm.push(D[i]);else df.push(D[i])}
@@ -206,26 +348,36 @@ function mc(q){
   var d=0;while(o.length<4&&d<df.length){var f=false;for(var k=0;k<o.length;k++)if(o[k].id===df[d].id){f=true;break}if(!f)o.push(df[d]);d++}
   sf(o);return o;
 }
+
 function hint(lv){
   if(G.a)return;
   var b=document.getElementById('h'+lv);if(b.className.indexOf('us')!==-1)return;b.className='hn us';G.hu++;
   var q=G.q[G.i],lb=['💡 かたちヒント','🍎 とくさんヒント','📍 ばしょヒント'];
   document.getElementById('hA').innerHTML='<div class="hx"><strong>'+lb[lv-1]+'</strong><br>'+q.h[lv-1]+'</div>';
 }
+
 function ans(bt,sel,cor){
-  if(G.a)return;G.a=true;var al=document.querySelectorAll('.cx');for(var i=0;i<al.length;i++)al[i].classList.add('dn');
+  if(G.a)return;G.a=true;
+  var al=document.querySelectorAll('.cx');for(var i=0;i<al.length;i++)al[i].classList.add('dn');
   var img=document.getElementById('silImg');
   if(sel.id===cor.id){
-    bt.classList.add('ok');G.c++;var pt=Math.max(10,30-G.hu*5);if(G.hu===0)G.nh++;G.s+=pt;if(!cl[cor.id]){cl[cor.id]=true;G.nw++}
+    bt.classList.add('ok');G.c++;
+    var pt=Math.max(10,30-G.hu*5);
+    if(G.hu===0)G.nh++;
+    G.s+=pt;
+    if(!cl[cor.id]){cl[cor.id]=true;G.nw++}
     document.getElementById('qS').textContent=G.s+' pt';
     img.className='sil-img colored';
-    sfl(bt,'+'+pt);cft(8);setTimeout(function(){G.i++;if(G.i>=G.q.length)res();else lq()},900);
+    sfl(bt,'+'+pt);cft(8);
+    setTimeout(function(){G.i++;if(G.i>=G.q.length)res();else lq()},900);
   } else {
-    bt.classList.add('ng');for(var j=0;j<al.length;j++)if(al[j].textContent===cor.n)al[j].classList.add('ok');
+    bt.classList.add('ng');
+    for(var j=0;j<al.length;j++)if(al[j].textContent===cor.n)al[j].classList.add('ok');
     img.className='sil-img colored';
     setTimeout(function(){yk(cor)},1000);
   }
 }
+
 function yk(p){
   var o=document.getElementById('yO');o.classList.add('sh');
   document.getElementById('yImg').src=IMG[p.id];
@@ -234,44 +386,177 @@ function yk(p){
   var b=document.getElementById('yB');b.style.transition='none';b.style.width='100%';b.offsetWidth;b.style.transition='width 2.8s linear';b.style.width='0%';
   setTimeout(function(){o.classList.remove('sh');G.i++;if(G.i>=G.q.length)res();else lq()},3000);
 }
+
 function res(){
-  ss('s2');var t=G.q.length,pc=G.c/t;var e,ti;
-  if(pc===1){e='👑';ti='パーフェクト！';cft(30)}else if(pc>=.8){e='🎉';ti='すばらしい！';cft(16)}else if(pc>=.5){e='😊';ti='いいかんじ！'}else{e='💪';ti='つぎはがんばろう！'}
-  document.getElementById('rE').textContent=e;document.getElementById('rT').textContent=ti;
-  document.getElementById('rS').textContent=G.s+' pt';document.getElementById('rD').textContent=t+'もんちゅう '+G.c+'もん せいかい';
-  document.getElementById('xC').textContent=G.c;document.getElementById('xN').textContent=G.nh;document.getElementById('xW').textContent=G.nw;
-  // Save to ranking
-  var entry={score:G.s,correct:G.c,total:t,noHint:G.nh,date:new Date().toLocaleDateString('ja-JP')};
-  ranking[G.mode].push(entry);
-  ranking[G.mode].sort(function(a,b){return b.score-a.score});
-  if(ranking[G.mode].length>10)ranking[G.mode]=ranking[G.mode].slice(0,10);
-  // Check if new record
-  if(ranking[G.mode][0].score===G.s&&ranking[G.mode][0].date===entry.date){
-    document.getElementById('rNew').style.display='block';
+  ss('s2');
+  var t=G.q.length,pc=G.c/t;var e,ti;
+  if(pc===1){e='👑';ti='パーフェクト！';cft(30)}
+  else if(pc>=.8){e='🎉';ti='すばらしい！';cft(16)}
+  else if(pc>=.5){e='😊';ti='いいかんじ！'}
+  else{e='💪';ti='つぎはがんばろう！'}
+
+  // ALT calculation
+  var altGain=getAltReward(pc);
+  var isFirst=!clearedModes[G.mode];
+  var firstBonus=isFirst?5:0;
+  if(isFirst)clearedModes[G.mode]=true;
+  var totalGain=altGain+firstBonus;
+  altTotal+=totalGain;
+  updAltBadge();
+
+  // Display
+  document.getElementById('rE').textContent=e;
+  document.getElementById('rT').textContent=ti;
+  document.getElementById('rS').textContent=G.s+' pt';
+  document.getElementById('rD').textContent=t+'もんちゅう '+G.c+'もん せいかい';
+  document.getElementById('xC').textContent=G.c;
+  document.getElementById('xN').textContent=G.nh;
+  document.getElementById('xW').textContent=G.nw;
+
+  // ALT box
+  document.getElementById('rAltMain').textContent='🪙 +'+totalGain+' ALT';
+  var starLabel=pc===1?'★★★ パーフェクト':pc>=.8?'★★☆':pc>=.5?'★☆☆':'クリア';
+  document.getElementById('rAltDetail').textContent=starLabel+' ボーナス: +'+altGain+' ALT';
+  document.getElementById('rAltFirst').style.display=isFirst?'block':'none';
+  document.getElementById('rAltTotalDisp').textContent='合計: '+altTotal+' ALT';
+
+  // ALT float animation on badge
+  var badge=document.getElementById('altBadge');
+  var af=document.createElement('div');af.className='alt-float';af.textContent='+'+totalGain;
+  var br=badge.getBoundingClientRect();
+  af.style.left=(br.left)+'px';af.style.top=(br.bottom+4)+'px';
+  document.body.appendChild(af);
+  setTimeout(function(){if(af.parentNode)af.parentNode.removeChild(af)},1300);
+
+  // Reset registration state
+  G.registered=false;
+  document.getElementById('rNameSec').style.display='block';
+  document.getElementById('rRegistered').style.display='none';
+  document.getElementById('rNameInput').value='';
+  document.getElementById('rRegBtn').disabled=true;
+
+  // Ranking preview (check weekly)
+  checkWeeklyReset();
+  var wList=rankData.weekly[G.mode];
+  var pos=findRankPos(wList,G.s);
+  if(pos<=10){
+    document.getElementById('rRankPrev').style.display='block';
+    document.getElementById('rRankLabel').textContent='📅 今週ランキング';
+    document.getElementById('rRankPos').textContent=pos+'位に入れるよ！';
   }else{
-    document.getElementById('rNew').style.display='none';
+    document.getElementById('rRankPrev').style.display='none';
   }
 }
-function showRank(){
-  ss('s4');
-  var tabs=document.querySelectorAll('.rk-tab');
-  for(var i=0;i<tabs.length;i++)tabs[i].onclick=(function(m){return function(){renderRank(m);var ts=document.querySelectorAll('.rk-tab');for(var j=0;j<ts.length;j++)ts[j].classList.remove('act');this.classList.add('act')}})(tabs[i].getAttribute('data-mode'));
-  tabs[0].classList.add('act');
-  renderRank('easy');
+
+function findRankPos(list,score){
+  var pos=1;
+  for(var i=0;i<list.length;i++){
+    if(list[i].score>=score)pos++;
+    else break;
+  }
+  return pos;
 }
-function renderRank(mode){
-  var list=ranking[mode]||[];
+
+// === Ranking Registration ===
+function checkRegBtn(){
+  var name=document.getElementById('rNameInput').value.trim();
+  document.getElementById('rRegBtn').disabled=!(name.length>0&&!G.registered);
+}
+
+function registerRank(){
+  if(G.registered)return;
+  var name=document.getElementById('rNameInput').value.trim();
+  if(!name)return;
+  G.registered=true;
+
+  checkWeeklyReset();
+  var entry={name:name,score:G.s,correct:G.c,total:G.q.length,date:Date.now()};
+
+  // Add to weekly
+  rankData.weekly[G.mode].push(entry);
+  rankData.weekly[G.mode].sort(function(a,b){return b.score===a.score?a.date-b.date:b.score-a.score});
+  if(rankData.weekly[G.mode].length>10)rankData.weekly[G.mode]=rankData.weekly[G.mode].slice(0,10);
+
+  // Add to legend
+  rankData.legend[G.mode].push(entry);
+  rankData.legend[G.mode].sort(function(a,b){return b.score===a.score?a.date-b.date:b.score-a.score});
+  if(rankData.legend[G.mode].length>10)rankData.legend[G.mode]=rankData.legend[G.mode].slice(0,10);
+
+  // Show confirmation
+  document.getElementById('rNameSec').style.display='none';
+  document.getElementById('rRegistered').style.display='block';
+
+  // Update preview
+  var wList=rankData.weekly[G.mode];
+  var pos=1;
+  for(var i=0;i<wList.length;i++){if(wList[i].date===entry.date&&wList[i].name===entry.name){pos=i+1;break}}
+  if(pos<=10){
+    document.getElementById('rRankPrev').style.display='block';
+    document.getElementById('rRankLabel').textContent='📅 今週ランキング';
+    document.getElementById('rRankPos').textContent=pos+'位！';
+  }
+}
+
+// === Ranking Screen ===
+function showRank(){
+  ss('s4');checkWeeklyReset();
+  rkCurPeriod='weekly';rkCurDiff='easy';
+  document.getElementById('rkPeriodW').classList.add('act');
+  document.getElementById('rkPeriodL').classList.remove('act');
+  var dts=document.querySelectorAll('.rk-diff-tab');
+  for(var i=0;i<dts.length;i++){dts[i].classList.remove('act');if(dts[i].getAttribute('data-diff')==='easy')dts[i].classList.add('act')}
+  renderRankList();
+  startCountdown();
+}
+
+function switchPeriod(p){
+  rkCurPeriod=p;
+  document.getElementById('rkPeriodW').classList.toggle('act',p==='weekly');
+  document.getElementById('rkPeriodL').classList.toggle('act',p==='legend');
+  renderRankList();
+  if(p==='weekly'){startCountdown()}else{stopCountdown();document.getElementById('rkCountdown').style.display='none'}
+}
+
+function switchDiff(el,d){
+  rkCurDiff=d;
+  var dts=document.querySelectorAll('.rk-diff-tab');
+  for(var i=0;i<dts.length;i++)dts[i].classList.remove('act');
+  el.classList.add('act');
+  renderRankList();
+}
+
+function renderRankList(){
+  checkWeeklyReset();
+  var list=rankData[rkCurPeriod][rkCurDiff]||[];
   var el=document.getElementById('rkList');
-  if(list.length===0){el.innerHTML='<div style="text-align:center;color:var(--dim);padding:30px 0">まだ きろくが ないよ！<br>あそんでみよう🎮</div>';return}
+  if(list.length===0){el.innerHTML='<div class="rk-empty">まだ きろくが ないよ！<br>あそんでみよう🎮</div>';return}
   var html='';
   for(var i=0;i<list.length;i++){
     var r=list[i];
     var medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
     var cls=i<3?'rk-top':'';
-    html+='<div class="rk-row '+cls+'"><span class="rk-pos">'+medal+(i>=3?(i+1):'')+'</span><span class="rk-sc">'+r.score+' pt</span><span class="rk-dt">'+r.correct+'/'+r.total+' NH:'+r.noHint+'</span><span class="rk-dd">'+r.date+'</span></div>';
+    var dateStr=new Date(r.date).toLocaleDateString('ja-JP');
+    html+='<div class="rk-row '+cls+'">';
+    html+='<span class="rk-pos">'+(medal||(i+1))+'</span>';
+    html+='<span class="rk-name">'+r.name+'</span>';
+    html+='<span class="rk-sc">'+r.score+'pt</span>';
+    html+='<span class="rk-dt">'+r.correct+'/'+r.total+' '+dateStr+'</span>';
+    html+='</div>';
   }
   el.innerHTML=html;
 }
+
+function startCountdown(){
+  stopCountdown();
+  document.getElementById('rkCountdown').style.display='block';
+  document.getElementById('rkTimer').textContent=getCountdownStr();
+  rkTimerInterval=setInterval(function(){
+    document.getElementById('rkTimer').textContent=getCountdownStr();
+  },60000);
+}
+function stopCountdown(){if(rkTimerInterval){clearInterval(rkTimerInterval);rkTimerInterval=null}}
+
+// === Collection ===
 function col(){
   ss('s3');var cn=0;for(var k in cl)if(cl[k])cn++;document.getElementById('cC').textContent=cn+'/47';
   var g=document.getElementById('cG');g.innerHTML='';
@@ -281,6 +566,28 @@ function col(){
     for(var pi=0;pi<r.i.length;pi++){var p=fp(r.i[pi]);if(!p)continue;var c=document.createElement('div');c.className='pc'+(cl[p.id]?' gt':'');c.textContent=p.n.replace(/[県府都道]$/,'');gg.appendChild(c)}
     s.appendChild(gg);g.appendChild(s)}
 }
+
+// === LINE Report ===
+function checkLineBtn(){
+  var name=document.getElementById('lineName').value.trim();
+  document.getElementById('lineBtn').disabled=!(name.length>0&&altTotal>0);
+}
+function showLineConfirm(){
+  document.getElementById('lcAlt').textContent=altTotal;
+  document.getElementById('lineConfirm').classList.add('sh');
+}
+function hideLineConfirm(){document.getElementById('lineConfirm').classList.remove('sh')}
+function sendLine(){
+  var name=document.getElementById('lineName').value.trim();
+  var cn=0;for(var k in cl)if(cl[k])cn++;
+  var msg='【シルエットクイズ ALT報告】\n名前: '+name+'\n💰 '+altTotal+'ALT\nコレクション: '+cn+'/47';
+  var url='https://line.me/R/oaMessage/@trail_official/?'+encodeURIComponent(msg);
+  window.open(url,'_blank');
+  altTotal=0;updAltBadge();
+  hideLineConfirm();checkLineBtn();
+}
+
+// === UI Helpers ===
 function sfl(el,tx){var r=el.getBoundingClientRect(),d=document.createElement('div');d.className='fp';d.textContent=tx;d.style.left=(r.left+r.width/2-16)+'px';d.style.top=(r.top-8)+'px';document.body.appendChild(d);setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d)},950)}
 function cft(n){var cs=['#00e5ff','#ff6b9d','#ffd700','#4cff91','#845ec2','#ff9671'];for(var i=0;i<n;i++){var c=document.createElement('div');c.className='cf';c.style.left=(Math.random()*100)+'%';c.style.top='-8px';c.style.background=cs[Math.floor(Math.random()*cs.length)];c.style.animationDelay=(Math.random()*.4)+'s';c.style.animationDuration=(1.2+Math.random()*.8)+'s';document.body.appendChild(c);(function(e){setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},2500)})(c)}}
 </script></body></html>
