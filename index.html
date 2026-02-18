@@ -104,6 +104,28 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .rk-sc{font-weight:900;color:var(--gold);min-width:55px;text-align:right}
 .rk-dt{color:var(--dim);font-size:.75em;margin-left:auto}
 .rk-empty{text-align:center;color:var(--dim);padding:30px 0}
+/* Review */
+.rv-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.rv-head h2{font-size:1.15em;font-weight:900;flex:1}
+.rv-summary{text-align:center;color:var(--ac2);font-weight:700;font-size:.92em;margin-bottom:16px}
+.rv-card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:12px;border:2px solid rgba(255,107,157,.2)}
+.rv-card.rv-ok{border-color:rgba(76,255,145,.2);opacity:.6}
+.rv-card-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.rv-card-img{width:64px;height:64px;object-fit:contain;border-radius:10px;background:rgba(255,255,255,.05);padding:4px}
+.rv-card-info{flex:1}
+.rv-card-q{font-size:.78em;color:var(--dim);margin-bottom:2px}
+.rv-card-ans{font-size:1.05em;font-weight:900}
+.rv-card-ans.wrong{color:var(--ac2)}
+.rv-card-ans.right{color:var(--grn)}
+.rv-card-correct{display:flex;align-items:center;gap:6px;background:rgba(76,255,145,.08);border-radius:10px;padding:8px 12px;font-size:.9em;font-weight:700;color:var(--grn)}
+.rv-card-correct img{width:36px;height:36px;object-fit:contain}
+.rv-card-hint{font-size:.78em;color:var(--dim);margin-top:6px}
+.rv-badge{font-size:.78em;font-weight:700;padding:3px 8px;border-radius:8px;flex-shrink:0}
+.rv-badge.rv-ng{background:rgba(255,107,157,.15);color:var(--ac2)}
+.rv-badge.rv-ok-b{background:rgba(76,255,145,.12);color:var(--grn)}
+.rv-filter{display:flex;gap:8px;margin-bottom:14px}
+.rv-filter-btn{flex:1;background:var(--card);border:1.5px solid rgba(255,255,255,.1);color:var(--dim);font-family:inherit;font-size:.8em;font-weight:700;padding:9px 4px;border-radius:10px;cursor:pointer;text-align:center}
+.rv-filter-btn.act{border-color:var(--ac);color:var(--ac);background:rgba(0,229,255,.08)}
 /* Animations */
 .fp{position:fixed;font-size:1.3em;font-weight:900;color:var(--gold);pointer-events:none;z-index:150;animation:fu .9s ease-out forwards}
 @keyframes fu{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
@@ -180,12 +202,24 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
       <div class="r-name-row"><input class="r-name-input" id="rNameInput" type="text" placeholder="なまえを入力" oninput="checkRegBtn()"><button class="r-name-btn" id="rRegBtn" disabled onclick="registerRank()">📝 とうろく</button></div>
     </div>
     <div class="r-registered" id="rRegistered" style="display:none">✅ ランキングにとうろくしたよ！</div>
-    <div class="rbs"><button class="rb p" onclick="home()">もどる</button><button class="rb s" onclick="showRank()">🏆 ランキング</button><button class="rb s" onclick="col()">🗾 コレクション</button></div>
+    <div class="rbs"><button class="rb p" onclick="home()">もどる</button><button class="rb s" onclick="review()">📝 ふくしゅう</button><button class="rb s" onclick="showRank()">🏆 ランキング</button><button class="rb s" onclick="col()">🗾 コレクション</button></div>
   </div></div>
   <!-- COLLECTION s3 -->
   <div class="scr" id="s3">
     <div class="ct"><button class="bb" onclick="home()">←</button><h2>🗾 コレクション</h2><span class="cc" id="cC">0/47</span></div>
     <div id="cG"></div>
+  </div>
+  <!-- REVIEW s5 -->
+  <div class="scr" id="s5">
+    <div class="rv-head"><button class="bb" onclick="ss('s2')">←</button><h2>📝 ふくしゅう</h2></div>
+    <div class="rv-summary" id="rvSummary"></div>
+    <div class="rv-filter">
+      <button class="rv-filter-btn act" id="rvFAll" onclick="rvFilter('all')">ぜんぶ</button>
+      <button class="rv-filter-btn" id="rvFNg" onclick="rvFilter('ng')">❌ まちがい</button>
+      <button class="rv-filter-btn" id="rvFOk" onclick="rvFilter('ok')">⭕ せいかい</button>
+    </div>
+    <div id="rvList"></div>
+    <div class="rbs" style="margin-top:18px"><button class="rb p" onclick="ss('s2')">もどる</button><button class="rb s" onclick="home()">🏠 ホーム</button></div>
   </div>
   <!-- RANKING s4 -->
   <div class="scr" id="s4">
@@ -345,7 +379,7 @@ function sf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1
 function fp(id){for(var i=0;i<D.length;i++)if(D[i].id===id)return D[i];return null}
 
 function go(m){
-  G={q:[],i:0,s:0,c:0,nh:0,nw:0,hu:0,a:false,mode:m,registered:false};
+  G={q:[],i:0,s:0,c:0,nh:0,nw:0,hu:0,a:false,mode:m,registered:false,log:[]};
   var ids=m==='easy'?EZ:m==='normal'?NM:null,pool=[];
   if(ids){for(var k=0;k<ids.length;k++)pool.push(fp(ids[k]))}else{for(var k=0;k<D.length;k++)pool.push(D[k])}
   sf(pool);G.q=pool.slice(0,m==='easy'?10:m==='normal'?15:20);
@@ -392,12 +426,14 @@ function ans(bt,sel,cor){
     if(!cl[cor.id]){cl[cor.id]=true;G.nw++}
     document.getElementById('qS').textContent=G.s+' pt';
     img.className='sil-img colored';
+    G.log.push({q:cor,sel:sel,ok:true});
     sfl(bt,'+'+pt);cft(8);
     setTimeout(function(){G.i++;if(G.i>=G.q.length)res();else lq()},900);
   } else {
     bt.classList.add('ng');
     for(var j=0;j<al.length;j++)if(al[j].textContent===cor.n)al[j].classList.add('ok');
     img.className='sil-img colored';
+    G.log.push({q:cor,sel:sel,ok:false});
     setTimeout(function(){yk(cor)},1000);
   }
 }
@@ -582,6 +618,62 @@ function startCountdown(){
   },60000);
 }
 function stopCountdown(){if(rkTimerInterval){clearInterval(rkTimerInterval);rkTimerInterval=null}}
+
+// === Review ===
+var rvCurFilter='all';
+function review(){
+  rvCurFilter='all';
+  ss('s5');renderReview();
+}
+function rvFilter(f){
+  rvCurFilter=f;
+  document.getElementById('rvFAll').className='rv-filter-btn'+(f==='all'?' act':'');
+  document.getElementById('rvFNg').className='rv-filter-btn'+(f==='ng'?' act':'');
+  document.getElementById('rvFOk').className='rv-filter-btn'+(f==='ok'?' act':'');
+  renderReview();
+}
+function renderReview(){
+  var log=G.log||[];
+  var wrong=0;for(var i=0;i<log.length;i++)if(!log[i].ok)wrong++;
+  var sm=document.getElementById('rvSummary');
+  if(wrong===0)sm.textContent='🎉 ぜんもんせいかい！すごい！';
+  else sm.textContent='❌ まちがい：'+wrong+'もん / '+log.length+'もんちゅう';
+  var items=[];
+  for(var i=0;i<log.length;i++){
+    if(rvCurFilter==='ng'&&log[i].ok)continue;
+    if(rvCurFilter==='ok'&&!log[i].ok)continue;
+    items.push({idx:i,d:log[i]});
+  }
+  var el=document.getElementById('rvList');
+  if(items.length===0){el.innerHTML='<div class="rk-empty">'+(rvCurFilter==='ng'?'まちがいは ないよ！🎉':'せいかいは ないよ…')+'</div>';return}
+  var html='';
+  for(var i=0;i<items.length;i++){
+    var d=items[i].d,num=items[i].idx+1;
+    var cls=d.ok?'rv-card rv-ok':'rv-card';
+    html+='<div class="'+cls+'">';
+    html+='<div class="rv-card-top">';
+    html+='<img class="rv-card-img" src="'+IMG[d.q.id]+'">';
+    html+='<div class="rv-card-info">';
+    html+='<div class="rv-card-q">だい'+num+'もん</div>';
+    if(d.ok){
+      html+='<div class="rv-card-ans right">⭕ '+d.q.n+'</div>';
+    }else{
+      html+='<div class="rv-card-ans wrong">❌ '+d.sel.n+'</div>';
+    }
+    html+='</div>';
+    html+='<span class="rv-badge '+(d.ok?'rv-ok-b':'rv-ng')+'">'+(d.ok?'せいかい':'まちがい')+'</span>';
+    html+='</div>';
+    if(!d.ok){
+      html+='<div class="rv-card-correct">';
+      html+='<img src="'+IMG[d.q.id]+'" style="filter:none">';
+      html+='<div>こたえ：'+d.q.n+'<span style="font-size:.8em;color:var(--dim);margin-left:6px">'+d.q.r+'</span></div>';
+      html+='</div>';
+      html+='<div class="rv-card-hint">💡 '+d.q.h[1]+'</div>';
+    }
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
 
 // === Collection ===
 function col(){
