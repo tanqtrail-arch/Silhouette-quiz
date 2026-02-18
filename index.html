@@ -111,23 +111,6 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 @keyframes cd{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(85vh) rotate(600deg);opacity:0}}
 .alt-float{position:fixed;font-size:1.5em;font-weight:900;color:var(--alt);pointer-events:none;z-index:150;animation:altUp 1.2s ease-out forwards;text-shadow:0 0 12px rgba(76,255,145,.5)}
 @keyframes altUp{0%{opacity:1;transform:translateY(0) scale(1)}50%{opacity:1;transform:translateY(-30px) scale(1.3)}100%{opacity:0;transform:translateY(-70px) scale(1)}}
-/* LINE Report */
-.line-sec{margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06)}
-.line-title{font-size:.95em;font-weight:900;color:var(--alt);margin-bottom:14px;text-align:center}
-.line-input{width:100%;background:var(--card);border:1.5px solid rgba(255,255,255,.12);color:var(--txt);font-family:inherit;font-size:1em;padding:12px 14px;border-radius:12px;margin-bottom:12px;outline:none}
-.line-input:focus{border-color:var(--ac)}
-.line-input::placeholder{color:var(--dim)}
-.line-btn{display:block;width:100%;background:linear-gradient(135deg,#06c755,#04a847);border:none;color:#fff;font-family:inherit;font-size:1em;font-weight:800;padding:14px;border-radius:14px;cursor:pointer;transition:all .2s}
-.line-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 20px rgba(6,199,85,.3)}
-.line-btn:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.8)}
-.line-confirm{display:none;position:fixed;inset:0;background:rgba(10,10,26,.93);z-index:400;align-items:center;justify-content:center}
-.line-confirm.sh{display:flex}
-.lc-box{background:var(--card);border-radius:18px;padding:24px;text-align:center;max-width:320px;width:88%;border:2px solid rgba(76,255,145,.25)}
-.lc-warn{font-size:1em;font-weight:700;color:var(--alt);margin-bottom:8px}
-.lc-msg{font-size:.88em;color:var(--dim);margin-bottom:18px}
-.lc-btns{display:flex;gap:10px;justify-content:center}
-.lc-cancel{background:var(--card);border:1.5px solid var(--dim);color:var(--txt);font-family:inherit;font-size:.92em;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer}
-.lc-ok{background:linear-gradient(135deg,#06c755,#04a847);border:none;color:#fff;font-family:inherit;font-size:.92em;font-weight:700;padding:10px 22px;border-radius:12px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -142,11 +125,6 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
     <div class="mc" onclick="go('hard')"><div class="mi">⭐⭐⭐</div><div class="mf"><h3>チャレンジ（20もん）</h3><p>ぜんこく からランダム！</p></div><div class="ms">★★★</div></div>
     <button class="cb" onclick="col()">🗾 コレクションちず</button>
     <button class="cb" onclick="showRank()" style="margin-top:10px;border-color:var(--ac);color:var(--ac)">🏆 ランキング</button>
-    <div class="line-sec">
-      <div class="line-title">💰 ALTをTRAILに報告する</div>
-      <input class="line-input" id="lineName" type="text" placeholder="なまえを入力" oninput="checkLineBtn()">
-      <button class="line-btn" id="lineBtn" disabled onclick="showLineConfirm()">💬 LINEで報告する</button>
-    </div>
   </div>
   <!-- QUIZ s1 -->
   <div class="scr" id="s1">
@@ -202,12 +180,6 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
   <img id="yImg" class="sil-img colored" src="" alt="" style="max-width:130px;max-height:130px">
   <div class="yn" id="yN"></div><div class="yf" id="yF"></div>
   <div class="yb"><div class="ybf" id="yB"></div></div>
-</div></div>
-<!-- LINE confirm -->
-<div class="line-confirm" id="lineConfirm"><div class="lc-box">
-  <div class="lc-warn">⚠️ <span id="lcAlt">0</span>ALTを報告してリセットします</div>
-  <div class="lc-msg">LINEでTRAILに送信されます</div>
-  <div class="lc-btns"><button class="lc-cancel" onclick="hideLineConfirm()">やめる</button><button class="lc-ok" onclick="sendLine()">OK！送る</button></div>
 </div></div>
 <script>
 // ─── TRAIL ALT・ランキング連携 ───────────────────────────
@@ -340,7 +312,7 @@ function getAltReward(pc){
 
 // === Core ===
 function ss(id){var s=document.querySelectorAll('.scr');for(var i=0;i<s.length;i++)s[i].classList.remove('on');document.getElementById(id).classList.add('on')}
-function home(){ss('s0');updAltBadge();checkLineBtn()}
+function home(){ss('s0');updAltBadge()}
 function sf(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}}
 function fp(id){for(var i=0;i<D.length;i++)if(D[i].id===id)return D[i];return null}
 
@@ -594,25 +566,6 @@ function col(){
     s.appendChild(gg);g.appendChild(s)}
 }
 
-// === LINE Report ===
-function checkLineBtn(){
-  var name=document.getElementById('lineName').value.trim();
-  document.getElementById('lineBtn').disabled=!(name.length>0&&altTotal>0);
-}
-function showLineConfirm(){
-  document.getElementById('lcAlt').textContent=altTotal;
-  document.getElementById('lineConfirm').classList.add('sh');
-}
-function hideLineConfirm(){document.getElementById('lineConfirm').classList.remove('sh')}
-function sendLine(){
-  var name=document.getElementById('lineName').value.trim();
-  var cn=0;for(var k in cl)if(cl[k])cn++;
-  var msg='【シルエットクイズ ALT報告】\n名前: '+name+'\n💰 '+altTotal+'ALT\nコレクション: '+cn+'/47';
-  var url='https://line.me/R/oaMessage/@trail_official/?'+encodeURIComponent(msg);
-  window.open(url,'_blank');
-  altTotal=0;updAltBadge();
-  hideLineConfirm();checkLineBtn();
-}
 
 // === UI Helpers ===
 function sfl(el,tx){var r=el.getBoundingClientRect(),d=document.createElement('div');d.className='fp';d.textContent=tx;d.style.left=(r.left+r.width/2-16)+'px';d.style.top=(r.top-8)+'px';document.body.appendChild(d);setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d)},950)}
