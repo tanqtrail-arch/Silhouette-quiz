@@ -4,10 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>シルエットクイズ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://trail-game-pro.onrender.com/sdk/trail-auth.css">
+<script src="https://trail-game-pro.onrender.com/sdk/trail-sdk.js"></script>
+<script src="https://trail-game-pro.onrender.com/sdk/trail-auth.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a1a;--card:#141428;--ac:#00e5ff;--ac2:#ff6b9d;--gold:#ffd700;--grn:#4cff91;--txt:#e8f0ff;--dim:#6680aa;--alt:#4cff91}
-body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding-bottom:40px}
+:root{--bg:#0a0a1a;--card:#141428;--ac:#1a73e8;--ac2:#ff6b9d;--gold:#ffd700;--grn:#4cff91;--txt:#e8f0ff;--dim:#6680aa;--alt:#4cff91;--brand:#1a73e8;--radius:12px;--shadow:0 4px 16px rgba(26,115,232,.15)}
+body{font-family:'M PLUS Rounded 1c',-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;padding-bottom:40px}
 .ctn{max-width:460px;margin:0 auto;padding:16px;padding-top:8px}
 .scr{display:none}.scr.on{display:block;animation:fi .4s ease}
 @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -15,8 +21,8 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .alt-badge .alt-num{font-variant-numeric:tabular-nums}
 .tl{text-align:center;font-size:2.2em;font-weight:900;background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:40px 0 4px}
 .ts{text-align:center;color:var(--dim);font-size:.92em;margin-bottom:32px}
-.mc{background:var(--card);border:2px solid rgba(0,229,255,.12);border-radius:16px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px}
-.mc:hover{border-color:var(--ac);transform:translateY(-1px);box-shadow:0 6px 24px rgba(0,229,255,.12)}
+.mc{background:var(--card);border:2px solid rgba(26,115,232,.12);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
+.mc:hover{border-color:var(--ac);transform:translateY(-1px);box-shadow:0 6px 24px rgba(26,115,232,.18)}
 .mi{font-size:1.8em;flex-shrink:0}.mf h3{font-size:1.05em;font-weight:700;margin-bottom:2px}.mf p{font-size:.78em;color:var(--dim)}.ms{margin-left:auto;color:var(--gold)}
 .cb{display:block;margin:24px auto 0;background:0 0;border:2px solid var(--gold);color:var(--gold);font-family:inherit;font-size:.95em;font-weight:700;padding:11px 26px;border-radius:28px;cursor:pointer}.cb:hover{background:var(--gold);color:var(--bg)}
 .qt{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -24,7 +30,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .qp{font-size:.88em;color:var(--dim)}.qs{font-weight:700;color:var(--gold)}
 .pb{height:5px;background:rgba(255,255,255,.06);border-radius:3px;margin-bottom:18px;overflow:hidden}
 .pf{height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:3px;transition:width .4s}
-.sc{background:var(--card);border-radius:20px;padding:20px;text-align:center;margin-bottom:14px;min-height:220px;display:flex;align-items:center;justify-content:center}
+.sc{background:var(--card);border-radius:var(--radius);padding:20px;text-align:center;margin-bottom:14px;min-height:220px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
 .sil-img{max-width:200px;max-height:200px;transition:all .4s ease}
 .sil-img.silhouette{filter:brightness(0) invert(1)}
 .sil-img.colored{filter:none}
@@ -35,7 +41,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .hx{background:rgba(0,229,255,.07);border-radius:12px;padding:11px 14px;font-size:.92em;text-align:center;animation:pp .25s ease}
 @keyframes pp{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 .ch{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
-.cx{background:var(--card);border:2px solid rgba(255,255,255,.1);color:var(--txt);font-family:inherit;font-size:1.02em;font-weight:700;padding:14px 8px;border-radius:14px;cursor:pointer;transition:all .15s}
+.cx{background:var(--card);border:2px solid rgba(255,255,255,.1);color:var(--txt);font-family:inherit;font-size:1.02em;font-weight:700;padding:14px 8px;border-radius:var(--radius);cursor:pointer;transition:all .15s;box-shadow:var(--shadow)}
 .cx:hover:not(.dn){border-color:var(--ac);transform:translateY(-2px)}
 .cx.dn{pointer-events:none}.cx.ok{border-color:var(--grn)!important;background:rgba(76,255,145,.12)!important}
 .cx.ng{border-color:var(--ac2)!important;background:rgba(255,107,157,.1)!important;opacity:.6}
@@ -59,8 +65,8 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .r-alt-first{color:var(--gold);font-weight:700;font-size:.9em;margin-top:6px;animation:pp .5s ease}
 .r-alt-total{font-size:.85em;color:var(--dim);margin-top:6px}
 .rst{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px}
-.sb{background:var(--card);border-radius:14px;padding:14px 6px}
-.sn{font-size:1.6em;font-weight:900;color:var(--ac)}.sl{font-size:.7em;color:var(--dim);margin-top:2px}
+.sb{background:var(--card);border-radius:var(--radius);padding:14px 6px;box-shadow:var(--shadow)}
+.sn{font-size:1.6em;font-weight:900;color:var(--brand)}.sl{font-size:.7em;color:var(--dim);margin-top:2px}
 /* Result ranking preview */
 .r-rank-prev{background:var(--card);border-radius:14px;padding:14px;margin-bottom:16px;text-align:center}
 .r-rank-label{font-size:.78em;color:var(--dim);margin-bottom:4px}
@@ -75,7 +81,7 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 .r-name-btn:disabled{opacity:.35;cursor:not-allowed}
 .r-registered{color:var(--grn);font-size:.85em;font-weight:700;text-align:center;margin-bottom:12px;animation:pp .3s ease}
 .rbs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.rb{border:none;font-family:inherit;font-size:.95em;font-weight:800;padding:13px 26px;border-radius:28px;cursor:pointer}
+.rb{border:none;font-family:inherit;font-size:.95em;font-weight:800;padding:13px 26px;border-radius:var(--radius);cursor:pointer}
 .rb:hover{transform:translateY(-2px)}
 .rb.p{background:linear-gradient(135deg,var(--ac),#00b4d8);color:var(--bg)}
 .rb.s{background:var(--card);border:2px solid var(--dim);color:var(--txt)}
@@ -136,6 +142,18 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
 </style>
 </head>
 <body>
+<div id="pinScreen" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:var(--card);border-radius:var(--radius);padding:32px 28px;text-align:center;max-width:360px;width:90%;box-shadow:var(--shadow)">
+    <div style="font-size:1.5em;font-weight:900;color:var(--brand);margin-bottom:8px">🗾 シルエットクイズ</div>
+    <div style="color:var(--dim);font-size:.88em;margin-bottom:20px">PINを入力してログイン</div>
+    <div id="pinPlayerName" style="display:none;color:var(--brand);font-weight:700;font-size:1.05em;margin-bottom:12px"></div>
+    <div id="pinInputArea">
+      <input id="pinInput" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="PIN (数字)" style="width:100%;background:var(--bg);border:2px solid rgba(26,115,232,.3);color:var(--txt);font-family:inherit;font-size:1.2em;font-weight:700;padding:12px;border-radius:var(--radius);text-align:center;outline:none;margin-bottom:14px">
+      <button id="pinBtn" onclick="submitPin()" style="width:100%;background:linear-gradient(135deg,var(--brand),#4285f4);border:none;color:#fff;font-family:inherit;font-size:1em;font-weight:800;padding:13px;border-radius:var(--radius);cursor:pointer">ログイン</button>
+      <div id="pinError" style="color:var(--ac2);font-size:.82em;margin-top:10px;display:none"></div>
+    </div>
+  </div>
+</div>
 <div class="alt-badge" id="altBadge">🪙 <span class="alt-num" id="altTotal">0</span> <span style="font-size:.75em;opacity:.7">ALT</span></div>
 <div class="ctn">
   <!-- HOME s0 -->
@@ -216,27 +234,96 @@ body{font-family:-apple-system,'Hiragino Sans','Yu Gothic UI',Meiryo,sans-serif;
   <div class="yb"><div class="ybf" id="yB"></div></div>
 </div></div>
 <script>
-// ─── TRAIL ALT・ランキング連携 ───────────────────────────
-const GAS_URL     = 'https://script.google.com/macros/s/AKfycbzKUyiUHIMp9JRFX0LEa88plEoavkbrjTQ5oHf9T-FDd6b4fhqfTCBVBy5rWUZPUQbY/exec';
-const GAME_ID     = 8;
-const GAME_NAME   = '都道府県シルエットクイズ';
-const SCORE_LABEL = '点';
-const ALT_AMOUNT  = 10;
-const TRAIL_PLAYER = new URLSearchParams(location.search).get('player') || null;
+// ─── TRAIL Game Pro 3.2 SDK 統合 ─────────────────────────
+var trailSdk = null;
+var trailReady = false;
+var trailPlayerName = '';
 
-async function sendResult(score) {
-  if (!TRAIL_PLAYER) return;
-  const opt = { method:'POST', redirect:'follow', headers:{'Content-Type':'text/plain'} };
-  await fetch(GAS_URL, { ...opt, body: JSON.stringify({
-    action: 'saveRanking',
-    gameId: GAME_ID, gameName: GAME_NAME,
-    player: TRAIL_PLAYER, score: score, scoreLabel: SCORE_LABEL
-  })});
-  await fetch(GAS_URL, { ...opt, body: JSON.stringify({
-    action: 'addCoin',
-    player: TRAIL_PLAYER, gameId: GAME_ID,
-    gameName: GAME_NAME, amount: ALT_AMOUNT
-  })});
+function initTrailSDK() {
+  try {
+    if (typeof TrailSDK === 'function') {
+      trailSdk = TrailSDK({ gameId: 8, tenantSlug: 'trail' });
+      trailReady = true;
+    }
+  } catch (e) {
+    trailReady = false;
+  }
+}
+
+function handlePinAuth() {
+  var params = new URLSearchParams(location.search);
+  var token = params.get('token');
+  if (token) {
+    document.getElementById('pinScreen').style.display = 'none';
+    initTrailSDK();
+    try {
+      if (trailSdk) {
+        trailPlayerName = trailSdk.getPlayerName() || '';
+        if (trailPlayerName) {
+          document.getElementById('pinPlayerName').textContent = '👋 ' + trailPlayerName + ' さん';
+          document.getElementById('pinPlayerName').style.display = 'block';
+        }
+      }
+    } catch (e) {}
+    showGame();
+  } else {
+    document.getElementById('pinScreen').style.display = 'flex';
+    document.getElementById('altBadge').style.display = 'none';
+    document.querySelector('.ctn').style.display = 'none';
+  }
+}
+
+function submitPin() {
+  var pin = document.getElementById('pinInput').value.trim();
+  if (!pin) {
+    document.getElementById('pinError').textContent = 'PINを入力してください';
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinBtn').disabled = true;
+  document.getElementById('pinBtn').textContent = '認証中...';
+  initTrailSDK();
+  try {
+    if (trailSdk) {
+      trailPlayerName = trailSdk.getPlayerName() || '';
+    }
+  } catch (e) {}
+  setTimeout(function() {
+    document.getElementById('pinScreen').style.display = 'none';
+    document.getElementById('altBadge').style.display = 'flex';
+    document.querySelector('.ctn').style.display = 'block';
+    if (trailPlayerName) {
+      document.getElementById('pinPlayerName').textContent = '👋 ' + trailPlayerName + ' さん';
+      document.getElementById('pinPlayerName').style.display = 'block';
+    }
+    showGame();
+  }, 500);
+}
+
+function showGame() {
+  document.getElementById('altBadge').style.display = 'flex';
+  document.querySelector('.ctn').style.display = 'block';
+  ss('s0');
+  updAltBadge();
+}
+
+function trailStartSession() {
+  try {
+    if (trailSdk) { trailSdk.startSession(); }
+  } catch (e) {}
+}
+
+function trailEndSession(score, correct, total) {
+  try {
+    if (trailSdk) {
+      var result = trailSdk.endSession({ score: score, correct: correct, total: total });
+      if (result && typeof result.alt === 'number') {
+        altTotal = result.alt;
+        updAltBadge();
+        try { trailSdk.showAltPopup(result.alt); } catch (e2) {}
+      }
+    }
+  } catch (e) {}
 }
 // ─────────────────────────────────────────────────────────
 
@@ -355,6 +442,7 @@ function go(m){
   var ids=m==='easy'?EZ:m==='normal'?NM:null,pool=[];
   if(ids){for(var k=0;k<ids.length;k++)pool.push(fp(ids[k]))}else{for(var k=0;k<D.length;k++)pool.push(D[k])}
   sf(pool);G.q=pool.slice(0,m==='easy'?10:m==='normal'?15:20);
+  trailStartSession();
   ss('s1');lq();
 }
 
@@ -436,8 +524,8 @@ function res(){
   altTotal+=totalGain;
   updAltBadge();
 
-  // TRAIL ALT・ランキング送信
-  sendResult(G.s);
+  // TRAIL SDK endSession
+  trailEndSession(G.s, G.c, G.q.length);
 
   // Display
   document.getElementById('rE').textContent=e;
@@ -467,8 +555,8 @@ function res(){
   G.registered=false;
   document.getElementById('rNameSec').style.display='block';
   document.getElementById('rRegistered').style.display='none';
-  document.getElementById('rNameInput').value='';
-  document.getElementById('rRegBtn').disabled=true;
+  document.getElementById('rNameInput').value=trailPlayerName||'';
+  document.getElementById('rRegBtn').disabled=!(trailPlayerName&&trailPlayerName.length>0);
 
   // Ranking preview (check weekly)
   checkWeeklyReset();
@@ -662,4 +750,9 @@ function col(){
 // === UI Helpers ===
 function sfl(el,tx){var r=el.getBoundingClientRect(),d=document.createElement('div');d.className='fp';d.textContent=tx;d.style.left=(r.left+r.width/2-16)+'px';d.style.top=(r.top-8)+'px';document.body.appendChild(d);setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d)},950)}
 function cft(n){var cs=['#00e5ff','#ff6b9d','#ffd700','#4cff91','#845ec2','#ff9671'];for(var i=0;i<n;i++){var c=document.createElement('div');c.className='cf';c.style.left=(Math.random()*100)+'%';c.style.top='-8px';c.style.background=cs[Math.floor(Math.random()*cs.length)];c.style.animationDelay=(Math.random()*.4)+'s';c.style.animationDuration=(1.2+Math.random()*.8)+'s';document.body.appendChild(c);(function(e){setTimeout(function(){if(e.parentNode)e.parentNode.removeChild(e)},2500)})(c)}}
+
+// === Initialization ===
+document.addEventListener('DOMContentLoaded', function() {
+  handlePinAuth();
+});
 </script></body></html>
