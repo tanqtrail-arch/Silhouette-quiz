@@ -7,9 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://trail-game-pro.onrender.com/sdk/trail-auth.css">
-<script src="https://trail-game-pro.onrender.com/sdk/trail-sdk.js"></script>
-<script src="https://trail-game-pro.onrender.com/sdk/trail-auth.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a1a;--card:#141428;--ac:#1a73e8;--ac2:#ff6b9d;--gold:#ffd700;--grn:#4cff91;--txt:#e8f0ff;--dim:#6680aa;--alt:#4cff91;--brand:#1a73e8;--radius:12px;--shadow:0 4px 16px rgba(26,115,232,.15)}
@@ -198,7 +195,7 @@ body{font-family:'M PLUS Rounded 1c',-apple-system,'Hiragino Sans','Yu Gothic UI
       <div class="r-name-row"><input class="r-name-input" id="rNameInput" type="text" placeholder="なまえを入力" oninput="checkRegBtn()"><button class="r-name-btn" id="rRegBtn" disabled onclick="registerRank()">📝 とうろく</button></div>
     </div>
     <div class="r-registered" id="rRegistered" style="display:none">✅ ランキングにとうろくしたよ！</div>
-    <div class="rbs"><button class="rb p" onclick="home()">もどる</button><button class="rb s" onclick="review()">📝 ふくしゅう</button><button class="rb s" onclick="showRank()">🏆 ランキング</button><button class="rb s" onclick="col()">🗾 コレクション</button></div>
+    <div class="rbs"><button class="rb p" onclick="home()">もどる</button><button class="rb s" onclick="review()">📝 ふくしゅう</button><button class="rb s" onclick="showRank()">🏆 ランキング</button><button class="rb s" onclick="col()">🗾 コレクション</button><button class="rb s" onclick="goHome()">🏠 ホームに戻る</button></div>
   </div></div>
   <!-- COLLECTION s3 -->
   <div class="scr" id="s3">
@@ -234,37 +231,57 @@ body{font-family:'M PLUS Rounded 1c',-apple-system,'Hiragino Sans','Yu Gothic UI
   <div class="yb"><div class="ybf" id="yB"></div></div>
 </div></div>
 <script>
-// ─── TRAIL Game Pro 3.2 SDK 統合 ─────────────────────────
-var trailSdk = null;
-var trailReady = false;
-var trailPlayerName = '';
+// ─── TRAIL GP3 連携 ───
+const TRAIL_API = 'https://trail-game-pro-3-2.onrender.com';
+const TRAIL_PLAYER = new URLSearchParams(location.search).get('player') || null;
 
-function initTrailSDK() {
-  try {
-    if (typeof TrailSDK === 'function') {
-      trailSdk = TrailSDK({ gameId: 8, tenantSlug: 'trail' });
-      trailReady = true;
-    }
-  } catch (e) {
-    trailReady = false;
-  }
+function calcAlt(score) {
+  if (score >= 1000) return 30;
+  if (score >= 500)  return 20;
+  if (score >= 100)  return 10;
+  return 5;
 }
+
+async function sendResultToTrail(score) {
+  if (!TRAIL_PLAYER) return 0;
+  const alt = calcAlt(score);
+  try {
+    await fetch(`${TRAIL_API}/api/external/game-result`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        player: TRAIL_PLAYER,
+        game_id: 'silhouette-quiz',
+        game_name: '都道府県シルエットクイズ',
+        score: score,
+        alt: alt
+      })
+    });
+  } catch (e) {
+    console.error('ALT送信失敗:', e);
+  }
+  return alt;
+}
+
+function goHome() {
+  window.location.href = TRAIL_PLAYER
+    ? 'https://trail-game-pro-3-2.onrender.com'
+    : location.href.split('?')[0];
+}
+
+var trailPlayerName = '';
 
 function handlePinAuth() {
   var params = new URLSearchParams(location.search);
   var token = params.get('token');
-  if (token) {
+  var player = params.get('player');
+  if (token || player) {
     document.getElementById('pinScreen').style.display = 'none';
-    initTrailSDK();
-    try {
-      if (trailSdk) {
-        trailPlayerName = trailSdk.getPlayerName() || '';
-        if (trailPlayerName) {
-          document.getElementById('pinPlayerName').textContent = '👋 ' + trailPlayerName + ' さん';
-          document.getElementById('pinPlayerName').style.display = 'block';
-        }
-      }
-    } catch (e) {}
+    if (TRAIL_PLAYER) {
+      trailPlayerName = TRAIL_PLAYER;
+      document.getElementById('pinPlayerName').textContent = '👋 ' + TRAIL_PLAYER + ' さん';
+      document.getElementById('pinPlayerName').style.display = 'block';
+    }
     showGame();
   } else {
     document.getElementById('pinScreen').style.display = 'flex';
@@ -282,20 +299,10 @@ function submitPin() {
   }
   document.getElementById('pinBtn').disabled = true;
   document.getElementById('pinBtn').textContent = '認証中...';
-  initTrailSDK();
-  try {
-    if (trailSdk) {
-      trailPlayerName = trailSdk.getPlayerName() || '';
-    }
-  } catch (e) {}
   setTimeout(function() {
     document.getElementById('pinScreen').style.display = 'none';
     document.getElementById('altBadge').style.display = 'flex';
     document.querySelector('.ctn').style.display = 'block';
-    if (trailPlayerName) {
-      document.getElementById('pinPlayerName').textContent = '👋 ' + trailPlayerName + ' さん';
-      document.getElementById('pinPlayerName').style.display = 'block';
-    }
     showGame();
   }, 500);
 }
@@ -305,25 +312,6 @@ function showGame() {
   document.querySelector('.ctn').style.display = 'block';
   ss('s0');
   updAltBadge();
-}
-
-function trailStartSession() {
-  try {
-    if (trailSdk) { trailSdk.startSession(); }
-  } catch (e) {}
-}
-
-function trailEndSession(score, correct, total) {
-  try {
-    if (trailSdk) {
-      var result = trailSdk.endSession({ score: score, correct: correct, total: total });
-      if (result && typeof result.alt === 'number') {
-        altTotal = result.alt;
-        updAltBadge();
-        try { trailSdk.showAltPopup(result.alt); } catch (e2) {}
-      }
-    }
-  } catch (e) {}
 }
 // ─────────────────────────────────────────────────────────
 
@@ -442,7 +430,6 @@ function go(m){
   var ids=m==='easy'?EZ:m==='normal'?NM:null,pool=[];
   if(ids){for(var k=0;k<ids.length;k++)pool.push(fp(ids[k]))}else{for(var k=0;k<D.length;k++)pool.push(D[k])}
   sf(pool);G.q=pool.slice(0,m==='easy'?10:m==='normal'?15:20);
-  trailStartSession();
   ss('s1');lq();
 }
 
@@ -524,8 +511,13 @@ function res(){
   altTotal+=totalGain;
   updAltBadge();
 
-  // TRAIL SDK endSession
-  trailEndSession(G.s, G.c, G.q.length);
+  // TRAIL GP3 結果送信
+  sendResultToTrail(G.s).then(function(alt) {
+    if (TRAIL_PLAYER && alt > 0) {
+      var trailMsg = document.getElementById('rAltMain');
+      if (trailMsg) trailMsg.textContent = '🪙 ' + alt + ' ALT を獲得！';
+    }
+  });
 
   // Display
   document.getElementById('rE').textContent=e;
